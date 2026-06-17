@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GNS 112 — Nigerian Peoples and Culture Quiz</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh}
+.topbar{background:#fff;border-bottom:1px solid #e5e3dc;padding:0.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.topbar h1{font-size:15px;font-weight:600;color:#1a1a1a}
+.topbar p{font-size:12px;color:#888}
+.container{max-width:680px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.card{background:#fff;border:1px solid #e5e3dc;border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+h2{font-size:22px;font-weight:600;margin-bottom:6px}
+.subtitle{font-size:14px;color:#666;margin-bottom:1.5rem}
+.mode-row{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap}
+.mode-btn{padding:0.55rem 1.1rem;border-radius:8px;font-size:13px;cursor:pointer;border:1px solid #d5d3cc;background:#fff;color:#333;font-family:inherit;transition:all .15s}
+.mode-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.filter-row{display:flex;gap:8px;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap}
+.filter-row label{font-size:13px;color:#666}
+.filter-row select{font-size:13px;border:1px solid #d5d3cc;border-radius:8px;padding:0.45rem 0.75rem;background:#fff;color:#1a1a1a;font-family:inherit;cursor:pointer}
+.info-box{background:#f0faf5;border:1px solid #9FE1CB;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.25rem}
+.info-box p{font-size:13px;color:#085041;line-height:1.6;margin-bottom:6px}
+.info-box p:last-child{margin-bottom:0}
+.info-box strong{font-weight:600}
+.btn-primary{background:#1D9E75;color:#fff;border:none;padding:0.75rem 1.5rem;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-primary:hover{background:#0F6E56}
+.btn-secondary{background:#fff;color:#1a1a1a;border:1px solid #d5d3cc;padding:0.65rem 1.2rem;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-secondary:hover{background:#f5f4f0}
+.btn-share{background:#fff;color:#1a1a1a;border:1px solid #d5d3cc;padding:0.65rem 1.2rem;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn-share:hover{background:#f5f4f0}
+.progress-wrap{margin-bottom:1.25rem}
+.progress-meta{display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:6px}
+.progress-bar{height:5px;background:#e5e3dc;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:#1D9E75;border-radius:3px;transition:width .3s}
+.stats{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap}
+.stat{background:#f5f4f0;border-radius:8px;padding:0.5rem 0.9rem;font-size:13px;color:#666}
+.stat strong{font-weight:600;color:#1a1a1a}
+.q-meta{font-size:12px;color:#aaa;margin-bottom:8px;font-weight:500;letter-spacing:.3px;text-transform:uppercase}
+.q-text{font-size:16px;font-weight:600;line-height:1.55;margin-bottom:1.25rem;color:#1a1a1a}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt{background:#f9f8f5;border:1px solid #e5e3dc;border-radius:8px;padding:0.75rem 1rem;font-size:14px;color:#1a1a1a;cursor:pointer;text-align:left;transition:all .15s;line-height:1.5;font-family:inherit;width:100%}
+.opt:hover:not(:disabled){border-color:#aaa;background:#f0efe9}
+.opt.correct{background:#e8f8f1;border-color:#1D9E75;color:#085041;font-weight:500}
+.opt.wrong{background:#fef0f0;border-color:#E24B4A;color:#501313}
+.opt.reveal{background:#e8f8f1;border-color:#1D9E75;color:#085041}
+.opt:disabled{cursor:default}
+.feedback{font-size:13px;margin-top:0.9rem;padding:0.65rem 0.9rem;border-radius:8px;line-height:1.5}
+.feedback.correct{background:#e8f8f1;color:#085041;border:1px solid #9FE1CB}
+.feedback.wrong{background:#fef0f0;color:#7a1515;border:1px solid #F09595}
+.nav{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:1.25rem;flex-wrap:wrap}
+.dot-map{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:1rem}
+.dot{width:22px;height:22px;border-radius:5px;background:#e5e3dc;cursor:pointer;font-size:10px;color:#fff;display:flex;align-items:center;justify-content:center;transition:all .1s;border:2px solid transparent;font-weight:600}
+.dot.answered-correct{background:#1D9E75}
+.dot.answered-wrong{background:#E24B4A}
+.dot.current{border-color:#1a1a1a}
+.results-wrap{text-align:center;padding:1rem 0}
+.score-ring{width:110px;height:110px;border-radius:50%;background:#e8f8f1;border:4px solid #1D9E75;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:1.25rem auto}
+.score-big{font-size:30px;font-weight:700;color:#085041}
+.score-sub{font-size:12px;color:#1D9E75;font-weight:500}
+.grade{font-size:18px;font-weight:700;margin-bottom:4px}
+.grade-sub{font-size:14px;color:#666;margin-bottom:1.5rem}
+.cat-table{margin-top:1.25rem;text-align:left}
+.cat-label{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+.cat-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.cat-name{min-width:70px;font-size:13px;color:#555}
+.cat-bar-bg{flex:1;height:7px;background:#e5e3dc;border-radius:4px;overflow:hidden}
+.cat-bar-fill{height:100%;background:#1D9E75;border-radius:4px}
+.cat-score{min-width:42px;text-align:right;font-size:13px;font-weight:600;color:#1a1a1a}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:0.65rem 1.25rem;border-radius:8px;font-size:13px;font-weight:500;z-index:999;display:none;white-space:nowrap}
+.review-banner{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:0.65rem 1rem;font-size:13px;color:#664d03;margin-bottom:1rem}
+@media(max-width:480px){.container{padding:1rem 0.75rem 3rem}.card{padding:1.25rem}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div>
+    <h1>GNS 112 — Nigerian Peoples and Culture</h1>
+    <p>Lagos State University · 100-question quiz</p>
+  </div>
+  <button class="btn-share" onclick="shareQuiz()" style="font-size:13px;padding:0.5rem 0.9rem">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    Share
+  </button>
+</div>
+<div class="container" id="app"></div>
+<div class="toast" id="toast">Link copied!</div>
+
+<script>
+const ALL_Q=[
+{w:1,q:"The Nok culture in Nigeria dates back to approximately which year?",o:["500 B.C.","925 B.C.","1200 A.D.","300 B.C."],a:1},
+{w:1,q:"Which empire in northern Nigeria was one of the earliest to adopt Islam?",o:["Oyo Empire","Hausa States","Kanem-Borno Empire","Benin Kingdom"],a:2},
+{w:1,q:"The Yoruba people are known for establishing which powerful empire?",o:["Kanem-Borno Empire","Oyo Empire","Benin Kingdom","Igbo-Ukwu"],a:1},
+{w:1,q:"The Igbo people of southeastern Nigeria are described as having which type of society?",o:["Monarchical","Theocratic","Acephalous","Federal"],a:2},
+{w:1,q:"The Benin Kingdom was established by which ethnic group?",o:["Yoruba","Igbo","Hausa","Edo"],a:3},
+{w:1,q:"Igbo-Ukwu is particularly known for which type of art?",o:["Terracotta sculptures","Bronze art","Ivory carvings","Wood carvings"],a:1},
+{w:1,q:"The Nok culture produced artworks primarily from which material?",o:["Bronze","Iron","Terracotta","Ivory"],a:2},
+{w:1,q:"Which ethnic group is associated with advanced urban settlements in southwestern Nigeria?",o:["Igbo","Hausa","Yoruba","Kanuri"],a:2},
+{w:1,q:"Nigeria's cultural history spans over how many years?",o:["One thousand years","Two thousand years","Three thousand years","Five hundred years"],a:2},
+{w:1,q:"The Benin Kingdom is renowned for its exquisite court art including which materials?",o:["Gold and silver","Bronze and ivory","Iron and clay","Wood and bone"],a:1},
+{w:1,q:"Which trade networks were developed extensively by the Hausa states?",o:["Trans-Atlantic trade","Trans-Saharan trade","Indian Ocean trade","Mediterranean trade"],a:1},
+{w:1,q:"According to GNS 112, which group had legends of divine origins?",o:["Hausa","Yoruba","Igbo","Kanuri"],a:2},
+{w:1,q:"The Kanem-Borno Empire emerged in which part of Nigeria?",o:["Southwestern Nigeria","Southeastern Nigeria","Northern Nigeria","South-South Nigeria"],a:2},
+{w:1,q:"The Oyo Empire played a pivotal role in regional politics and what else?",o:["Religion only","Culture","Military conquest only","International trade only"],a:1},
+{w:1,q:"Which best describes a contribution of pre-1800 Nigerian ethnic groups?",o:["Industrialization","Unique cultural achievements and complex social structures","Democratic governance","Colonial administration"],a:1},
+{w:2,q:"Norms are best defined as:",o:["Laws enforced by courts","Guidelines for behaviour in society","Personal beliefs and opinions","Religious doctrines"],a:1},
+{w:2,q:"Folkways are described as everyday social behaviours that are:",o:["Strictly enforced with heavy sanctions","Not strictly enforced; deviations seem odd but not immoral","Considered immoral if violated","The same across all societies"],a:1},
+{w:2,q:"Mores are norms that reflect:",o:["Minor social preferences","Core societal values and incur serious sanctions if breached","Individual preferences","Optional guidelines"],a:1},
+{w:2,q:"Values are defined as principles that guide judgments about what is:",o:["Legal or illegal","Right or wrong, good or bad","Popular or unpopular","Traditional or modern"],a:1},
+{w:2,q:"Which of the following is NOT listed as a category of values in Lesson Two?",o:["Personal values","Traditional values","Economic values","Universal values"],a:2},
+{w:2,q:"Rights of citizenship include which types of entitlements?",o:["Only civil rights","Civil, political, and social entitlements","Only political rights","Economic and military rights"],a:1},
+{w:2,q:"Duties of citizenship include responsibilities such as:",o:["Obeying laws, paying taxes, and contributing to national development","Only voting in elections","Only obeying laws","Only military service"],a:0},
+{w:2,q:"Deviations from folkways are described as:",o:["Criminal acts","Immoral actions","Odd but not immoral","Strictly punished"],a:2},
+{w:2,q:"Values form the basis for:",o:["Laws only","Norms","Political systems","Economic policies"],a:1},
+{w:2,q:"Which best describes the relationship between rights and duties in citizenship?",o:["Rights exist without corresponding duties","Duties are more important than rights","Together they form the foundation of a functioning and cohesive society","They are unrelated concepts"],a:2},
+{w:2,q:"Norms vary across:",o:["Only different countries","Societies and time periods","Only time periods","Only individuals"],a:1},
+{w:2,q:"Religious values are listed as one category under which broader concept?",o:["Norms","Duties","Values","Citizenship"],a:2},
+{w:2,q:"The document addressing Nigerian citizenship rights is the:",o:["Universal Declaration of Human Rights","African Charter","Constitution of the Federal Republic of Nigeria, 1999","Treaty of Lagos"],a:2},
+{w:2,q:"Social rights enable individuals to:",o:["Vote in elections only","Fully participate in societal and political life","Pay taxes","Own property"],a:1},
+{w:2,q:"National values are listed alongside which other category of values?",o:["Legal values","Traditional values","Corporate values","Media values"],a:1},
+{w:3,q:"Indigenous trade and commerce in Nigeria trace back to before which event?",o:["Nigeria's independence in 1960","The amalgamation of Nigeria in 1914","The abolition of the slave trade","The Treaty of Cession in 1861"],a:1},
+{w:3,q:"Trans-Saharan trade routes facilitated interactions with which groups?",o:["Asians and Americans","Arabs and Europeans","Chinese and Indians","Europeans only"],a:1},
+{w:3,q:"The indigenous apprenticeship system in Nigeria promoted:",o:["Industrialization","Self-sufficiency and minimized unemployment","Foreign investment","Colonial economic policies"],a:1},
+{w:3,q:"Which economic sectors were pivotal for ensuring self-reliance in pre-colonial Nigeria?",o:["Oil production","Agriculture, iron smelting, and craftsmanship","Banking and finance","Textile manufacturing"],a:1},
+{w:3,q:"Markets in pre-colonial Nigeria played what role?",o:["They were controlled by foreign merchants","They supported the apprenticeship system","They were primarily for luxury goods","They only facilitated barter trade"],a:1},
+{w:3,q:"Trans-Atlantic trade routes became active from as early as which century?",o:["Tenth century","Fifteenth century","Eighteenth century","Twentieth century"],a:1},
+{w:3,q:"The indigenous Igbo apprenticeship system is known as:",o:["Aro system","IgbaBonyi","Osu system","Esusu"],a:1},
+{w:3,q:"Which of the following was NOT mentioned as a key economic sector in pre-colonial Nigeria?",o:["Agriculture","Iron smelting","Petroleum extraction","Craftsmanship"],a:2},
+{w:3,q:"Trans-Saharan trade routes became active from as early as which century?",o:["Fifth century","Eighth century","Tenth century","Fifteenth century"],a:2},
+{w:3,q:"The indigenous apprenticeship system helped minimize which social problem?",o:["Corruption","Unemployment","Ethnic conflict","Illiteracy"],a:1},
+{w:3,q:"Which publication covers economic history of Nigeria from 1860 to 1960?",o:["A History of Nigeria by Falola and Heaton","An Economic History of Nigeria by Ekundare","Black Business and Economic Power","Entrepreneurship in Africa by Ochonu"],a:1},
+{w:3,q:"Nigeria's amalgamation occurred in which year?",o:["1860","1900","1914","1960"],a:2},
+{w:3,q:"Which journal published a study on the Igbo apprenticeship system and small business sustainability?",o:["Journal of African Studies","Australian Journal of Scientific Research","Renaissance University Journal of Management and Social Sciences","Ilorin Journal of History"],a:2},
+{w:3,q:"Iron smelting in pre-colonial Nigeria is classified under which broad category?",o:["Agriculture","Service sector","Economic sector","Colonial economy"],a:2},
+{w:3,q:"Which of the following best describes the purpose of pre-colonial Nigerian markets?",o:["Centres for colonial exchange","Supporting apprenticeship and local trade","Exclusively for foreign goods","Only for agricultural products"],a:1},
+{w:4,q:"British colonial rule in Nigeria began with which event?",o:["The 1914 amalgamation","The Treaty of Cession in 1861","The establishment of the Royal Niger Company","The Berlin Conference of 1885"],a:1},
+{w:4,q:"The 1914 amalgamation joined which territories?",o:["Northern and Southern Protectorates only","Northern Protectorate, Southern Protectorate, and the colony of Lagos","Lagos and the Northern Protectorate only","Eastern and Western Nigeria"],a:1},
+{w:4,q:"The primary goal of British colonial rule in Nigeria was to:",o:["Promote democracy","Ensure extraction and flow of mineral and agricultural resources to British industries","Develop Nigerian education","Abolish traditional governance"],a:1},
+{w:4,q:"British colonial administration in Nigeria was characterized by which system?",o:["Direct rule","Federal system","Indirect rule","Military rule"],a:2},
+{w:4,q:"Under indirect rule, traditional rulers were used as:",o:["Ceremonial figures only","Intermediaries in the colonial administration","Revolutionary leaders","Independent monarchs"],a:1},
+{w:4,q:"The Treaty of Cession in 1861 was signed between the British Crown and:",o:["The Sultan of Sokoto","The Oba of Lagos","The Ooni of Ife","The Emir of Kano"],a:1},
+{w:4,q:"British colonial policies restructured existing traditional governance to align with:",o:["Nigerian cultural values","British economic and political objectives","International law","Islamic principles"],a:1},
+{w:4,q:"The impact of colonial administration on traditional rulers was to:",o:["Strengthen their traditional roles","Significantly alter or diminish their traditional roles","Give them more power","Create new kingdoms"],a:1},
+{w:4,q:"The GNS compendium textbook pages for the colonial administration lesson are:",o:["322-332","347-354","355-367","368-375"],a:3},
+{w:4,q:"Which scholar wrote about the eastern province under colonial rule?",o:["Tamuno","Afigbo","Asiwaju","Abubakar"],a:1},
+{w:4,q:"The northern provinces under colonial rule are discussed by which scholar?",o:["Afigbo","Asiwaju","Abubakar Sa'ad","Tamuno"],a:2},
+{w:4,q:"Indirect rule meant colonial powers governed through:",o:["Appointed British officials only","Local traditional leaders","Military commanders","Elected representatives"],a:1},
+{w:4,q:"Which of the following best describes the colonial period's impact on Nigerian governance?",o:["It had no significant impact","It introduced new administrative systems","It fully preserved traditional governance","It gave Nigeria full independence"],a:1},
+{w:4,q:"Colonial rule primarily benefited which country's industries?",o:["France","Germany","Britain","Portugal"],a:2},
+{w:4,q:"Which book is referenced for a general history of British colonial administration in Nigeria?",o:["Certificate History of Nigeria by Omolewa","Groundwork of Nigeria History","A History of Nigeria by Falola","Basic Approach to Government by Aderibigbe"],a:0},
+{w:5,q:"The 'three R's' in Lesson Five stand for:",o:["Rights, Responsibilities, Reforms","Reduce, Reuse, Recycle","Reform, Rebuild, Restore","Rights, Resources, Revenues"],a:1},
+{w:5,q:"Which agency was established to promote national unity and civic knowledge in Nigeria?",o:["Economic and Financial Crimes Commission","National Orientation Agency (NOA)","Independent National Electoral Commission","Nigerian Security and Civil Defence Corps"],a:1},
+{w:5,q:"According to the lesson, Nigeria's underdevelopment is partly attributed to:",o:["Lack of natural resources","Decayed social values","Foreign interference only","Low population"],a:1},
+{w:5,q:"Which of the following is listed as a threat to national unity in Nigeria?",o:["Economic growth","Boko Haram insurgency","Agricultural development","Educational expansion"],a:1},
+{w:5,q:"The lesson states that traditional values in Nigeria have:",o:["Strengthened over time","Deteriorated, leading to increased crime and violence","Remained the same","Been replaced by better values"],a:1},
+{w:5,q:"The National Orientation Agency (NOA) aimed to foster:",o:["Military strength","National unity and combat corruption","Economic growth","Foreign investment"],a:1},
+{w:5,q:"Which conflict is mentioned alongside Boko Haram as threatening national unity?",o:["Biafra-Federal conflict","Student-police conflict","Herders-farmers conflict","Niger Delta militancy"],a:2},
+{w:5,q:"Effective communication and education are described as essential for:",o:["Economic development","Value reorientation","Military preparedness","Foreign policy"],a:1},
+{w:5,q:"The GNS compendium textbook pages for Lesson Five are:",o:["322-332","347-354","357-365","368-375"],a:2},
+{w:5,q:"Which best describes the purpose of value reorientation in Nigeria?",o:["To promote foreign culture","To conserve resources and promote sustainable national growth","To increase government revenue","To reduce population"],a:1},
+{w:5,q:"The NOA is described as not having effectively addressed which problem?",o:["Transportation issues","Corruption and social decay","Healthcare challenges","Military threats"],a:1},
+{w:5,q:"Corruption in Nigeria is identified as persisting particularly in which sector?",o:["The military","The educational system","The agricultural sector","The oil industry"],a:1},
+{w:5,q:"Which scholars published a study on repositioning Nigeria towards sustainable national unity?",o:["Agbese and Atiku","Ibrahim and Chaminda","Mbahi and Nwosu","Osimen, Akintoye and Adi"],a:1},
+{w:5,q:"Poverty and unemployment are said to fuel which problems in Nigeria?",o:["Economic growth","Issues like Boko Haram insurgency and corruption","Educational advancement","Agricultural development"],a:1},
+{w:5,q:"The 'three R's' are primarily aimed at:",o:["Political reform","Conserving resources and promoting sustainability","Military restructuring","Economic privatization"],a:1},
+{w:6,q:"British colonial rule in Nigeria spanned from 1849 to which year?",o:["1914","1945","1960","1963"],a:2},
+{w:6,q:"The British established a consulate in the Bights of Benin and Biafra in which year?",o:["1849","1861","1885","1893"],a:0},
+{w:6,q:"The Oil Rivers Protectorate was created in which year?",o:["1849","1862","1885","1897"],a:2},
+{w:6,q:"The Niger Coast Protectorate was established in which year?",o:["1849","1885","1893","1897"],a:2},
+{w:6,q:"Britain initially got involved in Nigeria primarily to:",o:["Discover natural resources","Curb the slave trade","Establish Christian missions","Promote trade routes"],a:1},
+{w:6,q:"Lagos was annexed by the British in which year?",o:["1849","1862","1885","1893"],a:1},
+{w:6,q:"By 1888, which company administered Northern Nigeria?",o:["British East Africa Company","Royal Niger Company","Niger Trading Company","British West Africa Company"],a:1},
+{w:6,q:"By which year were Northern Nigeria, Southern Nigeria, and Lagos Colony unified under the Colonial Office?",o:["1885","1893","1897","1914"],a:2},
+{w:6,q:"British control over Yorubaland was expanded by which year?",o:["1862","1885","1893","1897"],a:3},
+{w:6,q:"The British used which methods to cement their control despite local resistance?",o:["Diplomacy alone","Treaties and military conquests","Economic incentives only","Religious conversion"],a:1},
+{w:6,q:"The 1914 amalgamation is discussed in which lesson?",o:["Lesson One","Lesson Four","Lesson Six","Lesson Three"],a:2},
+{w:6,q:"European involvement in Nigeria transitioned from the slave trade to:",o:["Military conquest only","Legitimate commerce","Religious missions","Agricultural development"],a:1},
+{w:6,q:"The GNS compendium textbook pages for Lesson Six are:",o:["322-332","347-354","355-367","366-373"],a:3},
+{w:6,q:"Nigeria gained independence in which year?",o:["1914","1945","1960","1963"],a:2},
+{w:6,q:"Which publication covers an overview of party formation in Nigeria from 1960 to 1999?",o:["Agbu, Elections and Governance, 2017","Agbu, An Overview of Party Formation, 2019","Adeyeri, Nationalism in Africa, 2017","Ajayi, British Colonial Policies, 2022"],a:1}
+];
+
+let questions=[], answers=[], current=0, mode='study', filterWeek=0, started=false, reviewMode=false;
+
+function shuffle(arr){let a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startQuiz(){
+  let pool=filterWeek===0?ALL_Q:ALL_Q.filter(q=>q.w===filterWeek);
+  questions=shuffle(pool).slice(0,Math.min(100,pool.length));
+  answers=new Array(questions.length).fill(null);
+  current=0; started=true; reviewMode=false;
+  render();
+}
+
+function selectAnswer(i){
+  if(answers[current]!==null)return;
+  answers[current]=i;
+  render();
+}
+
+function next(){if(current<questions.length-1){current++;render();}}
+function prev(){if(current>0){current--;render();}}
+function goTo(i){current=i;render();}
+function getScore(){return answers.reduce((s,a,i)=>s+(a===questions[i].a?1:0),0);}
+function getCatScore(){
+  const c={};
+  questions.forEach((q,i)=>{
+    if(!c[q.w])c[q.w]={correct:0,total:0};
+    c[q.w].total++;
+    if(answers[i]===q.a)c[q.w].correct++;
+  });
+  return c;
+}
+function weekName(w){return{1:'History & Arts',2:'Norms & Values',3:'Trade & Economy',4:'Colonial Admin',5:'Re-orientation',6:'Political Evo.'}[w]||'Week '+w;}
+
+function shareQuiz(){
+  const url=window.location.href.split('?')[0];
+  navigator.clipboard.writeText(url).then(()=>showToast('Link copied!')).catch(()=>{prompt('Share this link:',url);});
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.display='block';
+  setTimeout(()=>t.style.display='none',2500);
+}
+
+function render(){
+  const app=document.getElementById('app');
+  if(!started){renderStart(app);return;}
+  const done=answers.filter(a=>a!==null).length;
+  if(done===questions.length&&!reviewMode&&current>=questions.length){renderResults(app);return;}
+  renderQuestion(app);
+}
+
+function renderStart(app){
+  app.innerHTML=`
+<div class="card" style="margin-top:1rem">
+  <h2>Quiz: Nigerian Peoples &amp; Culture</h2>
+  <p class="subtitle">100 questions · 6 weeks · Lagos State University</p>
+  <div class="mode-row">
+    <button class="mode-btn${mode==='study'?' active':''}" onclick="mode='study';document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Study mode</button>
+    <button class="mode-btn${mode==='exam'?' active':''}" onclick="mode='exam';document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Exam mode</button>
+  </div>
+  <div class="filter-row">
+    <label>Filter by week:</label>
+    <select onchange="filterWeek=parseInt(this.value)">
+      <option value="0">All weeks (100 questions)</option>
+      <option value="1">Week 1 — Nigerian History, Culture &amp; Arts</option>
+      <option value="2">Week 2 — Individual Norms and Values</option>
+      <option value="3">Week 3 — Trade, Economy &amp; Self-reliance</option>
+      <option value="4">Week 4 — Nigeria under Colonial Administration</option>
+      <option value="5">Week 5 — Re-orientation &amp; National Values</option>
+      <option value="6">Week 6 — Evolution as a Political Unit</option>
+    </select>
+  </div>
+  <div class="info-box">
+    <p><strong>Study mode</strong> — see the correct answer immediately after each question.</p>
+    <p><strong>Exam mode</strong> — answer all questions first, then view your score at the end.</p>
+  </div>
+  <button class="btn-primary" onclick="startQuiz()">Start quiz →</button>
+</div>`;
+}
+
+function renderQuestion(app){
+  const q=questions[current];
+  const ans=answers[current];
+  const answered=ans!==null;
+  const total=questions.length;
+  const done=answers.filter(a=>a!==null).length;
+  const pct=Math.round((done/total)*100);
+  const showAnswer=(answered&&mode==='study')||reviewMode;
+
+  const opts=q.o.map((o,i)=>{
+    let cls='opt';
+    if(showAnswer){
+      if(i===q.a)cls+=' correct';
+      else if(i===ans&&ans!==q.a)cls+=' wrong';
+    }
+    return`<button class="${cls}"${(answered||reviewMode)?' disabled':''} onclick="selectAnswer(${i})">${'ABCD'[i]}. ${o}</button>`;
+  }).join('');
+
+  let feedback='';
+  if(showAnswer){
+    const ok=ans===q.a;
+    feedback=`<div class="feedback ${ok?'correct':'wrong'}">${ok?'✓ Correct!':'✗ Incorrect — correct answer: '+'ABCD'[q.a]+'. '+q.o[q.a]}</div>`;
+  }
+
+  const dots=questions.map((_,i)=>{
+    let cls='dot';
+    if(answers[i]!==null) cls+=answers[i]===questions[i].a?' answered-correct':' answered-wrong';
+    if(i===current)cls+=' current';
+    return`<div class="${cls}" onclick="goTo(${i})" title="Q${i+1}">${i+1}</div>`;
+  }).join('');
+
+  const allDone=done===total;
+  let navRight='';
+  if(current<total-1) navRight=`<button class="btn-primary" onclick="next()">Next →</button>`;
+  else if(allDone&&!reviewMode) navRight=`<button class="btn-primary" onclick="current=total;render()">See results →</button>`;
+
+  const reviewBanner=reviewMode?`<div class="review-banner">📋 Review mode — all answers are shown. <a href="#" onclick="started=false;reviewMode=false;render();return false" style="color:#664d03;font-weight:600">← Back to start</a></div>`:'';
+
+  app.innerHTML=`
+${reviewBanner}
+<div class="progress-wrap">
+  <div class="progress-meta"><span>Q${current+1} of ${total}</span><span>${done} answered · ${pct}%</span></div>
+  <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+</div>
+<div class="stats">
+  <div class="stat">Week <strong>${q.w}</strong></div>
+  <div class="stat">${weekName(q.w)}</div>
+  ${mode==='study'&&!reviewMode?`<div class="stat">Score <strong>${getScore()}/${Math.max(done,1)}</strong></div>`:''}
+</div>
+<div class="dot-map">${dots}</div>
+<div class="card">
+  <div class="q-meta">Question ${current+1} · Week ${q.w}</div>
+  <div class="q-text">${q.q}</div>
+  <div class="options">${opts}</div>
+  ${feedback}
+</div>
+<div class="nav">
+  <div style="display:flex;gap:8px">
+    ${current>0?`<button class="btn-secondary" onclick="prev()">← Prev</button>`:''}
+    ${navRight}
+  </div>
+  ${!reviewMode?`<button class="btn-share" onclick="shareQuiz()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>`:''}
+</div>`;
+}
+
+function renderResults(app){
+  const score=getScore();
+  const total=questions.length;
+  const pct=Math.round((score/total)*100);
+  const grade=pct>=90?'Excellent! 🎉':pct>=70?'Good work! 💪':pct>=50?'Keep studying 📖':'More revision needed 📚';
+  const cats=getCatScore();
+  const catRows=Object.entries(cats).sort((a,b)=>+a[0]-+b[0]).map(([w,s])=>{
+    const p=Math.round((s.correct/s.total)*100);
+    return`<div class="cat-row">
+      <span class="cat-name">Week ${w}</span>
+      <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${p}%"></div></div>
+      <span class="cat-score">${s.correct}/${s.total}</span>
+    </div>`;
+  }).join('');
+
+  app.innerHTML=`
+<div class="card" style="margin-top:1rem">
+  <div class="results-wrap">
+    <h2 class="grade">${grade}</h2>
+    <p class="grade-sub">You completed the GNS 112 quiz</p>
+    <div class="score-ring">
+      <span class="score-big">${pct}%</span>
+      <span class="score-sub">${score} / ${total}</span>
+    </div>
+    <div class="cat-table">
+      <p class="cat-label">Performance by week</p>
+      ${catRows}
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:1.75rem;flex-wrap:wrap">
+      <button class="btn-primary" onclick="started=false;render()">Try again</button>
+      <button class="btn-secondary" onclick="reviewMode=true;current=0;render()">Review answers</button>
+      <button class="btn-share" onclick="shareQuiz()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
+    </div>
+  </div>
+</div>`;
+}
+
+render();
+</script>
+</body>
+</html>
